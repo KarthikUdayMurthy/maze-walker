@@ -1,0 +1,186 @@
+* {
+  font-family: 'Open Sans', sans-serif !important;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  background: #607d8b;
+  background: linear-gradient(135deg, #09203f 45%, #537895);
+  overflow: hidden;
+}
+
+#root {
+  padding: 24px 16px;
+}
+
+.app-wrap {
+  max-width: 480px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  padding: 12px;
+  gap: 12px;
+  margin: 0 auto;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(96, 125, 139, 0.45);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: white;
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 14px;
+  overflow: hidden;
+}
+
+.scrollWrap::-webkit-scrollbar {
+  display: block !important;
+  width: 3px;
+  height: 3px;
+  background: transparent;
+}
+
+.scrollWrap::-webkit-scrollbar-thumb {
+  background: #000;
+  border-radius: 20px;
+  border: 0px;
+}
+
+.controls-wrap {
+  width: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 4px;
+  gap: 8px;
+}
+
+.controls-wrap label {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
+  gap: 4px;
+  background: #09203f;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.controls-wrap label input {
+  border: 0;
+  outline: 0;
+  font-size: 18px;
+  text-align: center;
+  padding: 8px;
+  background: #87ceeb;
+  color: #09203f;
+}
+
+.btn-wrap {
+  border: 0;
+  outline: 0;
+  align-self: center;
+  background: #09203f;
+  font-size: 18px;
+  text-align: center;
+  letter-spacing: 0.6px;
+  padding: 8px 16px;
+  color: white;
+  cursor: pointer;
+  user-select: none;
+  transition: 0.3s;
+  -webkit-transition: 0.3s;
+}
+
+.btn-wrap:hover {
+  background: #2196f3;
+}
+
+.btn-wrap:disabled {
+  background: #343a40;
+  color: #aaa;
+}
+
+.maze-wrap {
+  align-self: center;
+  width: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.maze {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  background: #09203f;
+  padding: 4px;
+  gap: 2px;
+  border: 0;
+}
+
+.maze-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  border: 0;
+  flex-shrink: 0;
+  flex-grow: 0;
+}
+
+.maze-cell {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #09203f;
+  flex-shrink: 0;
+  flex-grow: 0;
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  white-space: nowrap;
+  background: #537895;
+  cursor: pointer;
+  user-select: none;
+  transition: 0.3s;
+  -webkit-transition: 0.3s;
+}
+
+.maze-cell.current {
+  border-color: #ffc107;
+}
+
+.maze-cell.path {
+  background: #2196f3;
+}
+
+.maze-cell.blocked {
+  background: #343a40;
+}
+
+.maze-cell .text-wrap {
+  font-family: monospace, monospace !important;
+  padding: 2px 4px;
+  background: #212121;
+  background-color: rgba(0, 0, 0, 0.45) !important;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: bold;
+}
