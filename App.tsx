@@ -64,11 +64,10 @@ export default function App() {
         <div className="info-wrap">
           {dataPoints.map((dp, ind) => {
             return (
-              <React.Fragment>
-                {ind !== 0 && <span> | </span>}
-                <span>{dp.label} : </span>
-                <span>{dp.value}</span>
-              </React.Fragment>
+              <div className="data-point-wrap">
+                <span className="data-point-label">{dp.label}: </span>
+                <span className="data-point-value">{dp.value}</span>
+              </div>
             );
           })}
         </div>

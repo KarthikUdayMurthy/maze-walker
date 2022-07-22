@@ -212,3 +212,24 @@ body,
   font-size: 10px;
   /* font-weight: bold; */
 }
+
+.data-point-wrap {
+  display: inline-block;
+  border: 1px solid #09203f;
+  padding: 2px 4px;
+  border-radius: 4px;
+  margin: 3px;
+}
+
+.data-point-label {
+  font-weight: bold;
+}
+
+.data-point-value {
+  font-weight: bold;
+  font-family: monospace, monospace !important;
+  background: #09203f;
+  color: white;
+  padding: 1px 4px;
+  border-radius: 2px;
+}
