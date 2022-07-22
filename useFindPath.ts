@@ -117,23 +117,28 @@ export default function useFindPath(
     const endTime = window.performance ? window.performance.now() : Date.now();
     console.log(endTime, startTime);
     if (shortPath.length === 0) {
-      alert(`No Path Found between [${startCell}] and [${endCell}]!`);
+      setDataPoints([
+        {
+          label: 'Error',
+          value: `No Path Found between [${startCell}] and [${endCell}]`,
+        },
+      ]);
     } else {
       animatePath(shortPath.slice());
+      setDataPoints([
+        {
+          label: 'Memoization',
+          value: MemoizeResults ? 'enabled' : 'disabled',
+        },
+        { label: 'Iterations', value: iterations },
+        { label: 'Steps in path', value: shortPath.length },
+        {
+          label: 'Time',
+          // value: (endTime - startTime),
+          value: Math.round((endTime - startTime) * 1000) / 1000 + 'ms',
+        },
+      ]);
     }
-    setDataPoints([
-      {
-        label: 'Memoization',
-        value: MemoizeResults ? 'enabled' : 'disabled',
-      },
-      { label: 'Iterations', value: iterations },
-      { label: 'Steps in path', value: shortPath.length },
-      {
-        label: 'Time',
-        // value: (endTime - startTime),
-        value: Math.round((endTime - startTime) * 1000) / 1000 + 'ms',
-      },
-    ]);
   }, [m, n, blockedCells]);
 
   return [currentCell, pathCells, resetPath, findShortPath, dataPoints];
