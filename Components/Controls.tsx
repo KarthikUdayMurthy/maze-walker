@@ -1,4 +1,5 @@
 import * as React from 'react';
+import SpinButton from './SpinButton';
 
 export interface IControlsProps {
   m: number;
@@ -10,32 +11,8 @@ export interface IControlsProps {
 const Controls = React.memo<IControlsProps>(({ m, n, setM, setN }) => {
   return (
     <div className="controls-wrap scrollWrap">
-      <label>
-        Rows
-        <input
-          type="number"
-          value={m}
-          min={1}
-          max={9}
-          onChange={(e) => {
-            setM(Number(e.target.value));
-          }}
-          tabIndex={0}
-        />
-      </label>
-      <label>
-        Cols
-        <input
-          type="number"
-          value={n}
-          min={1}
-          max={9}
-          onChange={(e) => {
-            setN(Number(e.target.value));
-          }}
-          tabIndex={1}
-        />
-      </label>
+      <SpinButton label="Rows" val={m} seVal={setM} min={1} max={9} />
+      <SpinButton label="Cols" val={n} seVal={setN} min={1} max={9} />
     </div>
   );
 });
