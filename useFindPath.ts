@@ -115,7 +115,6 @@ export default function useFindPath(
       : Date.now();
     const shortPath = _findShortPath(m, n, blockedCells);
     const endTime = window.performance ? window.performance.now() : Date.now();
-    console.log(endTime, startTime);
     if (shortPath.length === 0) {
       setDataPoints([
         {
