@@ -5,7 +5,7 @@ import Controls from './Components/Controls';
 import useFindPath from './useFindPath';
 
 export default function App() {
-  const [m, setM] = React.useState<number>(2);
+  const [m, setM] = React.useState<number>(3);
   const [n, setN] = React.useState<number>(3);
   const [blockedCells, setBlockedCells] = React.useState<string[]>([]);
 

@@ -1,35 +1,68 @@
 import * as React from 'react';
 
+const CELL_DELIMITER = '|';
+const PATH_DELIMITER = '::';
+const MemoizeResults = true;
+
 let iterations = 0;
 
-const _findAllPaths = (
+const _findAllPathsAsString = (
   m: number,
   n: number,
   bc: string[],
   i: number = 0,
   j: number = 0,
   pathStr: string = '',
-  pathArr: string[][] = []
-) => {
+  memo = {}
+): string => {
   const cId = `${i},${j}`;
 
-  if (i > m - 1 || j > n - 1) return [];
+  if (i > m - 1 || j > n - 1) return '';
+
+  if (bc.indexOf(cId) !== -1) return '';
 
   iterations++;
 
   if (i === m - 1 && j === n - 1) {
-    pathStr = pathStr + cId;
-    pathArr.push(pathStr.split('|'));
-    return pathArr;
+    return PATH_DELIMITER + pathStr + cId;
   }
 
-  pathStr = pathStr + cId + '|';
+  pathStr = pathStr + cId + CELL_DELIMITER;
 
-  _findAllPaths(m, n, bc, i + 1, j, pathStr, pathArr);
-  _findAllPaths(m, n, bc, i + 1, j + 1, pathStr, pathArr);
-  _findAllPaths(m, n, bc, i, j + 1, pathStr, pathArr);
+  let result = '';
+  if (cId in memo && MemoizeResults) {
+    result = memo[cId].replace(/::/g, PATH_DELIMITER + pathStr);
+  } else {
+    result =
+      _findAllPathsAsString(m, n, bc, i + 1, j, pathStr, memo) +
+      _findAllPathsAsString(m, n, bc, i + 1, j + 1, pathStr, memo) +
+      _findAllPathsAsString(m, n, bc, i, j + 1, pathStr, memo);
+    if (MemoizeResults) {
+      memo[cId] = result.split(pathStr).join('');
+    }
+  }
 
-  return pathArr;
+  return result;
+};
+
+const _findAllPaths = (m: number, n: number, bc: string[]) => {
+  return _findAllPathsAsString(m, n, bc)
+    .split(PATH_DELIMITER)
+    .filter((p) => p !== '')
+    .map((pathString) => pathString.split(CELL_DELIMITER));
+};
+
+const _findShortPath = (m: number, n: number, bc: string[]): string[] => {
+  let shortPath = [],
+    shortPathLength = -1;
+  const allPaths = _findAllPaths(m, n, bc);
+  allPaths.forEach((path) => {
+    if (path.length < shortPathLength || shortPathLength === -1) {
+      shortPathLength = path.length;
+      shortPath = path.slice();
+    }
+  });
+  return shortPath;
 };
 
 export default function useFindPath(
@@ -53,9 +86,16 @@ export default function useFindPath(
     const startCell = '0,0';
     const endCell = `${m - 1},${n - 1}`;
     resetPath();
-    setCurrentCell(startCell);
+    // setCurrentCell(startCell);
     iterations = 0;
-    console.log(_findAllPaths(m, n, blockedCells), iterations);
+    // console.log(_findAllPaths(m, n, blockedCells));
+    const shortPath = _findShortPath(m, n, blockedCells);
+    if (shortPath.length === 0) {
+      alert(`No Path Found between [${startCell}] and [${endCell}]!`);
+    } else {
+      setPathCells(shortPath);
+    }
+    console.log('iterations', iterations);
   }, [m, n, blockedCells]);
 
   return [currentCell, pathCells, resetPath, findShortPath];
