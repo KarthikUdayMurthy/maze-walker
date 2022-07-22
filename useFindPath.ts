@@ -67,17 +67,24 @@ const _findShortPath = (m: number, n: number, bc: string[]): string[] => {
   return shortPath;
 };
 
+export interface IDataPoint {
+  label: string;
+  value: string | number;
+}
+
 export default function useFindPath(
   m: number,
   n: number,
   blockedCells: string[]
-): [string, string[], () => void, () => void] {
+): [string, string[], () => void, () => void, IDataPoint[]] {
   const [currentCell, setCurrentCell] = React.useState<string>('');
   const [pathCells, setPathCells] = React.useState<string[]>([]);
+  const [dataPoints, setDataPoints] = React.useState<IDataPoint[]>([]);
 
   const resetPath = React.useCallback(() => {
     setPathCells([]);
     setCurrentCell('');
+    setDataPoints([]);
   }, []);
 
   React.useEffect(() => {
@@ -103,17 +110,31 @@ export default function useFindPath(
     resetPath();
     setCurrentCell(startCell);
     iterations = 0;
-    console.log(`Memoization ${MemoizeResults ? 'enabled' : 'disabled'}`);
-    console.time('Running Algorithm');
+    const startTime = window.performance
+      ? window.performance.now()
+      : Date.now();
     const shortPath = _findShortPath(m, n, blockedCells);
-    console.timeEnd('Running Algorithm');
+    const endTime = window.performance ? window.performance.now() : Date.now();
+    console.log(endTime, startTime);
     if (shortPath.length === 0) {
       alert(`No Path Found between [${startCell}] and [${endCell}]!`);
     } else {
       animatePath(shortPath.slice());
     }
-    console.log('iterations', iterations);
+    setDataPoints([
+      {
+        label: 'Memoization',
+        value: MemoizeResults ? 'enabled' : 'disabled',
+      },
+      { label: 'Iterations', value: iterations },
+      { label: 'Steps in path', value: shortPath.length },
+      {
+        label: 'Time',
+        // value: (endTime - startTime),
+        value: Math.round((endTime - startTime) * 1000) / 1000 + 'ms',
+      },
+    ]);
   }, [m, n, blockedCells]);
 
-  return [currentCell, pathCells, resetPath, findShortPath];
+  return [currentCell, pathCells, resetPath, findShortPath, dataPoints];
 }

@@ -12,11 +12,8 @@ export default function App() {
     '0,4',
   ]);
 
-  const [currentCell, pathCells, resetPath, findShortPath] = useFindPath(
-    m,
-    n,
-    blockedCells
-  );
+  const [currentCell, pathCells, resetPath, findShortPath, dataPoints] =
+    useFindPath(m, n, blockedCells);
 
   const toggleBlock = React.useCallback(
     (cellId: string) => {
@@ -63,6 +60,19 @@ export default function App() {
         currentCell={currentCell}
         pathCells={pathCells}
       />
+      {dataPoints.length !== 0 && (
+        <div className="info-wrap">
+          {dataPoints.map((dp, ind) => {
+            return (
+              <React.Fragment>
+                {ind !== 0 && <span> | </span>}
+                <span>{dp.label} : </span>
+                <span>{dp.value}</span>
+              </React.Fragment>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
