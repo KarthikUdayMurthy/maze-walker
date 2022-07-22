@@ -57,6 +57,7 @@ const _findShortPath = (m: number, n: number, bc: string[]): string[] => {
   let shortPath = [],
     shortPathLength = -1;
   const allPaths = _findAllPaths(m, n, bc);
+  // console.log(allPaths);
   allPaths.forEach((path) => {
     if (path.length < shortPathLength || shortPathLength === -1) {
       shortPathLength = path.length;
@@ -102,12 +103,13 @@ export default function useFindPath(
     resetPath();
     setCurrentCell(startCell);
     iterations = 0;
-    // console.log(_findAllPaths(m, n, blockedCells));
+    console.log(`Memoization ${MemoizeResults ? 'enabled' : 'disabled'}`);
+    console.time('Running Algorithm');
     const shortPath = _findShortPath(m, n, blockedCells);
+    console.timeEnd('Running Algorithm');
     if (shortPath.length === 0) {
       alert(`No Path Found between [${startCell}] and [${endCell}]!`);
     } else {
-      // setPathCells(shortPath);
       animatePath(shortPath.slice());
     }
     console.log('iterations', iterations);
