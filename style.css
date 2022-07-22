@@ -73,18 +73,29 @@ body,
   padding: 4px;
   gap: 4px;
   background: #09203f;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: bold;
 }
 
 .controls-wrap label input {
   border: 0;
   outline: 0;
-  font-size: 18px;
+  font-size: 14px;
   text-align: center;
-  padding: 8px;
+  padding: 4px;
   background: #87ceeb;
-  color: #09203f;
+  color: #000;
+}
+
+.info-wrap {
+  font-size: 12px;
+  font-family: 'Open Sans', sans-serif !important;
+  vertical-align: middle;
+  border-radius: 4px;
+  background: #87ceebaa;
+  color: #000;
+  padding: 6px 12px;
+  font-weight: bold;
 }
 
 .btn-wrap {
@@ -92,7 +103,7 @@ body,
   outline: 0;
   align-self: center;
   background: #09203f;
-  font-size: 18px;
+  font-size: 14px;
   text-align: center;
   letter-spacing: 0.6px;
   padding: 8px 16px;
@@ -117,9 +128,9 @@ body,
   width: 100%;
   overflow: auto;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .maze {
@@ -152,8 +163,8 @@ body,
   border: 2px solid #09203f;
   flex-shrink: 0;
   flex-grow: 0;
-  width: 50px;
-  height: 50px;
+  width: 36px;
+  height: 36px;
   overflow: hidden;
   white-space: nowrap;
   background: #537895;
@@ -164,7 +175,7 @@ body,
 }
 
 .maze-cell.current {
-  border-color: #ffc107;
+  border-color: #2196f3;
 }
 
 .maze-cell.path {
@@ -175,12 +186,29 @@ body,
   background: #343a40;
 }
 
+.maze-cell.start {
+  background: #539578;
+}
+
+.maze-cell.end {
+  background: #957853;
+}
+
+.maze-cell.display {
+  width: 12px;
+  height: 12px;
+  display: inline-block;
+  border: 1px solid #09203f;
+  margin: 0px 2px;
+  vertical-align: middle;
+}
+
 .maze-cell .text-wrap {
   font-family: monospace, monospace !important;
   padding: 2px 4px;
   background: #212121;
   background-color: rgba(0, 0, 0, 0.45) !important;
   border-radius: 4px;
-  font-size: 12px;
-  font-weight: bold;
+  font-size: 10px;
+  /* font-weight: bold; */
 }

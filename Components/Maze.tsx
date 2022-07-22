@@ -11,14 +11,24 @@ export interface IMazeProps {
 
 const Maze = React.memo<IMazeProps>(
   ({ m, n, blockedCells, toggleBlock, currentCell = '', pathCells = [] }) => {
+    const [showLabels, setShowLabels] = React.useState<boolean>(true);
+
     if (m < 1 || n < 1) {
       return null;
     }
 
     const mazeArr: Array<Array<number>> = Array(m).fill(Array(n).fill(''));
 
+    const pathCellsEmpty = pathCells.length === 0;
+
     return (
       <div className="maze-wrap scrollWrap">
+        <button
+          className="btn-wrap"
+          onClick={() => {
+            setShowLabels(!showLabels);
+          }}
+        >{`${showLabels ? 'Hide' : 'Show'} labels`}</button>
         <div className="maze">
           {mazeArr.map((cols, i) => (
             <div key={i} className="maze-row">
@@ -27,6 +37,8 @@ const Maze = React.memo<IMazeProps>(
                 const isBlocked = blockedCells.indexOf(cellId) !== -1;
                 const isCurrentCell = cellId === currentCell;
                 const isPathCell = pathCells.indexOf(cellId) !== -1;
+                const isStartCell = i === 0 && j === 0;
+                const isEndCell = i === m - 1 && j === n - 1;
                 return (
                   <div
                     key={cellId}
@@ -34,18 +46,31 @@ const Maze = React.memo<IMazeProps>(
                       'maze-cell ' +
                       (isCurrentCell ? ' current ' : '') +
                       (isPathCell ? ' path ' : '') +
-                      (isBlocked ? ' blocked ' : '')
+                      (isBlocked ? ' blocked ' : '') +
+                      (isStartCell ? ' start ' : '') +
+                      (isEndCell ? ' end ' : '')
                     }
                     title={`[${cellId}] ${
-                      isBlocked ? 'Click to un-block' : 'Click to block'
+                      isStartCell
+                        ? 'start cell'
+                        : isEndCell
+                        ? 'end cell'
+                        : isBlocked
+                        ? 'Click to un-block'
+                        : 'Click to block'
                     }`}
                     onClick={() => {
                       toggleBlock(cellId);
                     }}
+                    style={{
+                      opacity: isPathCell || pathCellsEmpty ? '1' : '0.66',
+                    }}
                   >
-                    <span className="text-wrap">
-                      {i},{j}
-                    </span>
+                    {showLabels && (
+                      <span className="text-wrap">
+                        {i},{j}
+                      </span>
+                    )}
                   </div>
                 );
               })}

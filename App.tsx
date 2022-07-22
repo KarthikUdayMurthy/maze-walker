@@ -5,9 +5,12 @@ import Controls from './Components/Controls';
 import useFindPath from './useFindPath';
 
 export default function App() {
-  const [m, setM] = React.useState<number>(3);
-  const [n, setN] = React.useState<number>(3);
-  const [blockedCells, setBlockedCells] = React.useState<string[]>([]);
+  const [m, setM] = React.useState<number>(5);
+  const [n, setN] = React.useState<number>(5);
+  const [blockedCells, setBlockedCells] = React.useState<string[]>([
+    '1,1',
+    '0,4',
+  ]);
 
   const [currentCell, pathCells, resetPath, findShortPath] = useFindPath(
     m,
@@ -44,6 +47,14 @@ export default function App() {
       >
         Find Short Path
       </button>
+      <div className="info-wrap">
+        Use the above controls to change the below grid size, click on a cell to
+        block<div className="maze-cell display blocked"></div> / unblock
+        <div className="maze-cell display"></div> it. Click on the 'Find Short
+        Path' button to find the shortest path between the start cell
+        <div className="maze-cell display start"></div> and end cell
+        <div className="maze-cell display end"></div>.
+      </div>
       <Maze
         m={m}
         n={n}
