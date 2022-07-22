@@ -2,6 +2,7 @@ import * as React from 'react';
 
 const CELL_DELIMITER = '|';
 const PATH_DELIMITER = '::';
+const ANIM_DELAY = 300;
 const MemoizeResults = true;
 
 let iterations = 0;
@@ -82,18 +83,32 @@ export default function useFindPath(
     resetPath();
   }, [m, n]);
 
+  const animatePath = React.useCallback((cells: string[]) => {
+    if (cells.length === 0) {
+      setCurrentCell('');
+      return;
+    }
+    const currCell = cells.shift();
+    setPathCells((pc) => {
+      return [...pc, currCell];
+    });
+    setCurrentCell(currCell);
+    setTimeout(animatePath, ANIM_DELAY, cells);
+  }, []);
+
   const findShortPath = React.useCallback(() => {
     const startCell = '0,0';
     const endCell = `${m - 1},${n - 1}`;
     resetPath();
-    // setCurrentCell(startCell);
+    setCurrentCell(startCell);
     iterations = 0;
     // console.log(_findAllPaths(m, n, blockedCells));
     const shortPath = _findShortPath(m, n, blockedCells);
     if (shortPath.length === 0) {
       alert(`No Path Found between [${startCell}] and [${endCell}]!`);
     } else {
-      setPathCells(shortPath);
+      // setPathCells(shortPath);
+      animatePath(shortPath.slice());
     }
     console.log('iterations', iterations);
   }, [m, n, blockedCells]);

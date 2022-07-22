@@ -39,10 +39,10 @@ export default function App() {
       <Controls m={m} n={n} setM={setM} setN={setN} />
       <button
         className="btn-wrap"
-        disabled={pathCells.length > 0}
+        disabled={currentCell !== ''}
         onClick={findShortPath}
       >
-        Find Path
+        Find Short Path
       </button>
       <Maze
         m={m}
