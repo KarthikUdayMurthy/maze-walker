@@ -121,6 +121,11 @@ export default function useFindPath(
           label: 'Error',
           value: `No Path Found between [${startCell}] and [${endCell}]`,
         },
+        { label: 'Iterations', value: iterations },
+        {
+          label: 'Time',
+          value: Math.round((endTime - startTime) * 1000) / 1000 + 'ms',
+        },
       ]);
     } else {
       animatePath(shortPath.slice());
@@ -133,7 +138,6 @@ export default function useFindPath(
         { label: 'Steps in path', value: shortPath.length },
         {
           label: 'Time',
-          // value: (endTime - startTime),
           value: Math.round((endTime - startTime) * 1000) / 1000 + 'ms',
         },
       ]);
