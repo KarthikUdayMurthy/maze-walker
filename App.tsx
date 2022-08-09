@@ -56,7 +56,7 @@ export default function App() {
         <div className="maze-cell display start"></div> and end cell
         <div className="maze-cell display end"></div> using movements (
         <span style={{ fontSize: '18px' }}>
-          &#8595;, &#8594;, &#8592;, &#8593;, &#8600;, &#8599;
+          &#8600;, &#8595;, &#8594;, &#8599;, &#8592;, &#8593;
         </span>
         ).
       </div>

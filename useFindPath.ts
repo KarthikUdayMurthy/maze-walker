@@ -27,6 +27,8 @@ const _findShortPathUsingBFS = (m: number, n: number, bc: string[]) => {
     if (blocked.has(currentCellInd)) continue;
     if (visited.has(currentCellInd)) continue;
 
+    console.log(currentCellInd, _currentPath);
+
     iterations++;
 
     visited.add(currentCellInd);
@@ -36,12 +38,12 @@ const _findShortPathUsingBFS = (m: number, n: number, bc: string[]) => {
     if (currentCellInd === dstCellInd) return currentPath.split(CELL_DELIMITER);
 
     const directions = [
+      [1, 1], // diagonal down-right
       [1, 0], // down
       [0, 1], // right
+      [-1, 1], // diagonal up-right
       [0, -1], // left
       [-1, 0], // up
-      [1, 1], // diagonal down-right
-      [-1, 1], // diagonal up-right
     ];
 
     directions.forEach(([rDiff, cDiff]) => {
