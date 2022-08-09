@@ -7,64 +7,56 @@ const MemoizeResults = true;
 
 let iterations = 0;
 
-const _findAllPathsAsString = (
-  m: number,
-  n: number,
-  bc: string[],
-  i: number = 0,
-  j: number = 0,
-  pathStr: string = '',
-  memo = {}
-): string => {
-  const cId = `${i},${j}`;
+const _findShortPathUsingBFS = (m: number, n: number, bc: string[]) => {
+  const blockedSet = new Set(bc);
+  let srcCell = { ind: '0,0', blocked: false };
+  const dstCell = { ind: `${m - 1},${n - 1}`, blocked: false };
+  const visited = new Set();
 
-  if (i > m - 1 || j > n - 1) return '';
+  const grid = Array(m)
+    .fill([])
+    .map((r, rInd) =>
+      Array(n)
+        .fill([])
+        .map((c, cInd) => {
+          const posInd = `${rInd},${cInd}`;
+          return { ind: posInd, blocked: blockedSet.has(posInd) };
+        })
+    );
 
-  if (bc.indexOf(cId) !== -1) return '';
+  const queue: Array<[string, string]> = [[srcCell.ind, '']];
 
-  iterations++;
+  while (queue.length > 0) {
+    const [currentCellInd, _currentPath] = queue.shift();
 
-  if (i === m - 1 && j === n - 1) {
-    return PATH_DELIMITER + pathStr + cId;
+    const rPos = parseInt(currentCellInd.split(',')[0]);
+    const cPos = parseInt(currentCellInd.split(',')[1]);
+
+    const rowInbounds = 0 <= rPos && rPos < m;
+    const colInbounds = 0 <= cPos && cPos < n;
+
+    if (!rowInbounds || !colInbounds) continue;
+
+    const currentCell = grid[rPos][cPos];
+
+    if (currentCell.blocked) continue;
+    if (visited.has(currentCell.ind)) continue;
+
+    iterations++;
+
+    visited.add(currentCell.ind);
+    const currentPath =
+      _currentPath + (_currentPath ? '|' : '') + currentCell.ind;
+
+    if (currentCell.ind === dstCell.ind) return currentPath.split('|');
+
+    queue.push([`${rPos + 1},${cPos}`, currentPath]);
+    queue.push([`${rPos},${cPos + 1}`, currentPath]);
+    queue.push([`${rPos},${cPos - 1}`, currentPath]);
+    queue.push([`${rPos - 1},${cPos}`, currentPath]);
   }
 
-  pathStr = pathStr + cId + CELL_DELIMITER;
-
-  let result = '';
-  if (cId in memo && MemoizeResults) {
-    result = memo[cId].replace(/::/g, PATH_DELIMITER + pathStr);
-  } else {
-    result =
-      _findAllPathsAsString(m, n, bc, i + 1, j, pathStr, memo) +
-      _findAllPathsAsString(m, n, bc, i + 1, j + 1, pathStr, memo) +
-      _findAllPathsAsString(m, n, bc, i, j + 1, pathStr, memo);
-    if (MemoizeResults) {
-      memo[cId] = result.split(pathStr).join('');
-    }
-  }
-
-  return result;
-};
-
-const _findAllPaths = (m: number, n: number, bc: string[]) => {
-  return _findAllPathsAsString(m, n, bc)
-    .split(PATH_DELIMITER)
-    .filter((p) => p !== '')
-    .map((pathString) => pathString.split(CELL_DELIMITER));
-};
-
-const _findShortPath = (m: number, n: number, bc: string[]): string[] => {
-  let shortPath = [],
-    shortPathLength = -1;
-  const allPaths = _findAllPaths(m, n, bc);
-  // console.log(allPaths);
-  allPaths.forEach((path) => {
-    if (path.length < shortPathLength || shortPathLength === -1) {
-      shortPathLength = path.length;
-      shortPath = path.slice();
-    }
-  });
-  return shortPath;
+  return [];
 };
 
 export interface IDataPoint {
@@ -113,7 +105,7 @@ export default function useFindPath(
     const startTime = window.performance
       ? window.performance.now()
       : Date.now();
-    const shortPath = _findShortPath(m, n, blockedCells);
+    const shortPath = _findShortPathUsingBFS(m, n, blockedCells);
     const endTime = window.performance ? window.performance.now() : Date.now();
     if (shortPath.length === 0) {
       setDataPoints([
@@ -135,7 +127,7 @@ export default function useFindPath(
           value: MemoizeResults ? 'enabled' : 'disabled',
         },
         { label: 'Iterations', value: iterations },
-        { label: 'Steps in path', value: shortPath.length },
+        { label: 'Steps in path', value: shortPath.length - 1 },
         {
           label: 'Time',
           value: Math.round((endTime - startTime) * 1000) / 1000 + 'ms',

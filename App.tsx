@@ -8,8 +8,12 @@ export default function App() {
   const [m, setM] = React.useState<number>(5);
   const [n, setN] = React.useState<number>(5);
   const [blockedCells, setBlockedCells] = React.useState<string[]>([
+    '0,1',
     '1,1',
-    '0,4',
+    '2,1',
+    '2,3',
+    '3,3',
+    '4,3',
   ]);
 
   const [currentCell, pathCells, resetPath, findShortPath, dataPoints] =
@@ -48,7 +52,7 @@ export default function App() {
         Use the above controls to change the below grid size, click on a cell to
         block<div className="maze-cell display blocked"></div> / unblock
         <div className="maze-cell display"></div> it. Click on the 'Find Short
-        Path' (using movements down, right and diagonal) button to find the
+        Path' (using movements down, right, up and left) button to find the
         shortest path between the start cell
         <div className="maze-cell display start"></div> and end cell
         <div className="maze-cell display end"></div>.
@@ -65,7 +69,7 @@ export default function App() {
         <div className="info-wrap">
           {dataPoints.map((dp, ind) => {
             return (
-              <div className="data-point-wrap">
+              <div className="data-point-wrap" key={dp.label}>
                 <span className="data-point-label">{dp.label}: </span>
                 <span className="data-point-value">{dp.value}</span>
               </div>
