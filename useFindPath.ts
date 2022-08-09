@@ -27,8 +27,6 @@ const _findShortPathUsingBFS = (m: number, n: number, bc: string[]) => {
     if (blocked.has(currentCellInd)) continue;
     if (visited.has(currentCellInd)) continue;
 
-    console.log(currentCellInd, _currentPath);
-
     iterations++;
 
     visited.add(currentCellInd);
