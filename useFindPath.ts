@@ -1,30 +1,17 @@
 import * as React from 'react';
 
 const CELL_DELIMITER = '|';
-const PATH_DELIMITER = '::';
 const ANIM_DELAY = 300;
-const MemoizeResults = true;
 
 let iterations = 0;
 
 const _findShortPathUsingBFS = (m: number, n: number, bc: string[]) => {
-  const blockedSet = new Set(bc);
-  let srcCell = { ind: '0,0', blocked: false };
-  const dstCell = { ind: `${m - 1},${n - 1}`, blocked: false };
+  const blocked = new Set(bc);
+  const srcCellInd = '0,0';
+  const dstCellInd = `${m - 1},${n - 1}`;
   const visited = new Set();
 
-  const grid = Array(m)
-    .fill([])
-    .map((r, rInd) =>
-      Array(n)
-        .fill([])
-        .map((c, cInd) => {
-          const posInd = `${rInd},${cInd}`;
-          return { ind: posInd, blocked: blockedSet.has(posInd) };
-        })
-    );
-
-  const queue: Array<[string, string]> = [[srcCell.ind, '']];
+  const queue: Array<[string, string]> = [[srcCellInd, '']];
 
   while (queue.length > 0) {
     const [currentCellInd, _currentPath] = queue.shift();
@@ -37,23 +24,29 @@ const _findShortPathUsingBFS = (m: number, n: number, bc: string[]) => {
 
     if (!rowInbounds || !colInbounds) continue;
 
-    const currentCell = grid[rPos][cPos];
-
-    if (currentCell.blocked) continue;
-    if (visited.has(currentCell.ind)) continue;
+    if (blocked.has(currentCellInd)) continue;
+    if (visited.has(currentCellInd)) continue;
 
     iterations++;
 
-    visited.add(currentCell.ind);
+    visited.add(currentCellInd);
     const currentPath =
-      _currentPath + (_currentPath ? '|' : '') + currentCell.ind;
+      _currentPath + (_currentPath ? CELL_DELIMITER : '') + currentCellInd;
 
-    if (currentCell.ind === dstCell.ind) return currentPath.split('|');
+    if (currentCellInd === dstCellInd) return currentPath.split(CELL_DELIMITER);
 
-    queue.push([`${rPos + 1},${cPos}`, currentPath]);
-    queue.push([`${rPos},${cPos + 1}`, currentPath]);
-    queue.push([`${rPos},${cPos - 1}`, currentPath]);
-    queue.push([`${rPos - 1},${cPos}`, currentPath]);
+    const directions = [
+      [1, 0], // down
+      [0, 1], // right
+      [0, -1], // left
+      [-1, 0], // up
+      [1, 1], // diagonal down-right
+      [-1, 1], // diagonal up-right
+    ];
+
+    directions.forEach(([rDiff, cDiff]) => {
+      queue.push([`${rPos + rDiff},${cPos + cDiff}`, currentPath]);
+    });
   }
 
   return [];
@@ -122,10 +115,6 @@ export default function useFindPath(
     } else {
       animatePath(shortPath.slice());
       setDataPoints([
-        {
-          label: 'Memoization',
-          value: MemoizeResults ? 'enabled' : 'disabled',
-        },
         { label: 'Iterations', value: iterations },
         { label: 'Steps in path', value: shortPath.length - 1 },
         {

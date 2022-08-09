@@ -52,10 +52,13 @@ export default function App() {
         Use the above controls to change the below grid size, click on a cell to
         block<div className="maze-cell display blocked"></div> / unblock
         <div className="maze-cell display"></div> it. Click on the 'Find Short
-        Path' (using movements down, right, up and left) button to find the
-        shortest path between the start cell
+        Path' button to find the shortest path between the start cell
         <div className="maze-cell display start"></div> and end cell
-        <div className="maze-cell display end"></div>.
+        <div className="maze-cell display end"></div> using movements (
+        <span style={{ fontSize: '18px' }}>
+          &#8595;, &#8594;, &#8592;, &#8593;, &#8600;, &#8599;
+        </span>
+        ).
       </div>
       <Maze
         m={m}
